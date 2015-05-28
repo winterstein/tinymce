@@ -1,6 +1,10 @@
 /**
  * plugin.js
  *
+ * Forked version: adds the code_format_raw config parameter.
+ * If set to true, then the editor passes html in as raw -- which means all attributes and tags are preserved as-is.
+ * If unset or false: the default behaviour is to strip bits of html tinyMCE does not recognise.
+ * 
  * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
  *
@@ -28,9 +32,9 @@ tinymce.PluginManager.add('code', function(editor) {
 				// don't move the focus to the editor before creating an undo
 				// transation since it tries to make a bookmark for the current selection
 				editor.focus();
-
+				var formatRaw = editor.getParam("code_format_raw");
 				editor.undoManager.transact(function() {
-					editor.setContent(e.data.code);
+					editor.setContent(e.data.code, formatRaw?{format:'raw'} : {});
 				});
 
 				editor.selection.setCursorLocation();
