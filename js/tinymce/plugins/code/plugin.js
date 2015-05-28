@@ -4,7 +4,7 @@
  * Forked version: adds the code_format_raw config parameter.
  * If set to true, then the editor passes html in as raw -- which means all attributes and tags are preserved as-is.
  * If unset or false: the default behaviour is to strip bits of html tinyMCE does not recognise.
- * 
+ *
  * Copyright, Moxiecode Systems AB
  * Released under LGPL License.
  *
@@ -33,8 +33,12 @@ tinymce.PluginManager.add('code', function(editor) {
 				// transation since it tries to make a bookmark for the current selection
 				editor.focus();
 				var formatRaw = editor.getParam("code_format_raw");
+				var setArgs = {};
+				if (formatRaw) {
+					setArgs = {format: 'raw'};
+				}
 				editor.undoManager.transact(function() {
-					editor.setContent(e.data.code, formatRaw?{format:'raw'} : {});
+					editor.setContent(e.data.code, setArgs);
 				});
 
 				editor.selection.setCursorLocation();
@@ -44,7 +48,7 @@ tinymce.PluginManager.add('code', function(editor) {
 
 		// Gecko has a major performance issue with textarea
 		// contents so we need to set it when all reflows are done
-		win.find('#code').value(editor.getContent({source_view: true}));
+		win.find('#code').value(editor.getContent({format:'raw', source_view: true}));
 	}
 
 	editor.addCommand("mceCodeEditor", showDialog);
